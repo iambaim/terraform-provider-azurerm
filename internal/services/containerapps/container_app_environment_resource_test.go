@@ -395,8 +395,8 @@ resource "azurerm_container_app_environment" "test" {
   internal_load_balancer_enabled = true
 
   custom_domain_certificate_blob_base64 = filebase64("testdata/testacc.pfx")
-  custom_domain_certificate_password 	= "TestAcc"
-  custom_domain_dns_suffix 				= "acceptancetest.contoso.com"
+  custom_domain_certificate_password    = "TestAcc"
+  custom_domain_dns_suffix              = "acceptancetest.contoso.com"
 
   tags = {
     Foo    = "Bar"
