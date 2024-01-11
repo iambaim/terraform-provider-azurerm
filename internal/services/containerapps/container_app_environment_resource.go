@@ -415,6 +415,9 @@ func (r ContainerAppEnvironmentResource) Update() sdk.ResourceFunc {
 					CertificateValue:    pointer.To(state.CertificateValue),
 					CertificatePassword: pointer.To(state.CertificatePassword),
 				}
+
+			if metadata.ResourceData.HasChange("workload_profile") {
+				existing.Model.Properties.WorkloadProfiles = helpers.ExpandWorkloadProfiles(state.WorkloadProfiles)
 			}
 
 			// (@jackofallops) This is not updatable and needs to be removed since the read does not return the sensitive Key field.
