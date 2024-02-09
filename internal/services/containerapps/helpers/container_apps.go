@@ -151,6 +151,7 @@ type Ingress struct {
 	CustomDomains          []CustomDomain          `tfschema:"custom_domain"`
 	IsExternal             bool                    `tfschema:"external_enabled"`
 	FQDN                   string                  `tfschema:"fqdn"`
+	StickySessions         []StickySessions        `tfschema:"sticky_sessions"`
 	TargetPort             int                     `tfschema:"target_port"`
 	ExposedPort            int                     `tfschema:"exposed_port"`
 	TrafficWeights         []TrafficWeight         `tfschema:"traffic_weight"`
@@ -188,6 +189,8 @@ func ContainerAppIngressSchema() *pluginsdk.Schema {
 				},
 
 				"ip_security_restriction": ContainerAppIngressIpSecurityRestriction(),
+
+				"sticky_sessions": ContainerAppIngressStickySessions(),
 
 				"target_port": {
 					Type:         pluginsdk.TypeInt,
@@ -245,6 +248,8 @@ func ContainerAppIngressSchemaComputed() *pluginsdk.Schema {
 
 				"ip_security_restriction": ContainerAppIngressIpSecurityRestrictionComputed(),
 
+				"sticky_sessions": ContainerAppIngressStickySessionsComputed(),
+
 				"target_port": {
 					Type:        pluginsdk.TypeInt,
 					Computed:    true,
@@ -280,6 +285,7 @@ func ExpandContainerAppIngress(input []Ingress, appName string) *containerapps.I
 		CustomDomains:          expandContainerAppIngressCustomDomain(ingress.CustomDomains),
 		External:               pointer.To(ingress.IsExternal),
 		Fqdn:                   pointer.To(ingress.FQDN),
+		StickySessions:         expandContainerAppIngressStickySessions(ingress.StickySessions),
 		TargetPort:             pointer.To(int64(ingress.TargetPort)),
 		ExposedPort:            pointer.To(int64(ingress.ExposedPort)),
 		Traffic:                expandContainerAppIngressTraffic(ingress.TrafficWeights, appName),
@@ -302,6 +308,7 @@ func FlattenContainerAppIngress(input *containerapps.Ingress, appName string) []
 		CustomDomains:          flattenContainerAppIngressCustomDomain(ingress.CustomDomains),
 		IsExternal:             pointer.From(ingress.External),
 		FQDN:                   pointer.From(ingress.Fqdn),
+		StickySessions:         flattenContainerAppIngressStickySessions(ingress.StickySessions),
 		TargetPort:             int(pointer.From(ingress.TargetPort)),
 		ExposedPort:            int(pointer.From(ingress.ExposedPort)),
 		TrafficWeights:         flattenContainerAppIngressTraffic(ingress.Traffic, appName),
@@ -424,6 +431,19 @@ func flattenContainerAppIngressCustomDomain(input *[]containerapps.CustomDomain)
 	return result
 }
 
+func flattenContainerAppIngressStickySessions(input *containerapps.IngressStickySessions) []StickySessions {
+	if input == nil {
+		return []StickySessions{}
+	}
+
+	stickSessions := *input
+	result := StickySessions{
+		Affinity: string(*stickSessions.Affinity),
+	}
+
+	return []StickySessions{result}
+}
+
 func flattenContainerAppIngressIpSecurityRestrictions(input *[]containerapps.IPSecurityRestrictionRule) []IpSecurityRestriction {
 	if input == nil {
 		return []IpSecurityRestriction{}
@@ -442,6 +462,10 @@ func flattenContainerAppIngressIpSecurityRestrictions(input *[]containerapps.IPS
 	}
 
 	return result
+}
+
+type StickySessions struct {
+	Affinity string `tfschema:"affinity"`
 }
 
 type TrafficWeight struct {
@@ -529,6 +553,43 @@ func ContainerAppIngressIpSecurityRestrictionComputed() *pluginsdk.Schema {
 	}
 }
 
+func ContainerAppIngressStickySessions() *pluginsdk.Schema {
+	return &pluginsdk.Schema{
+		Type:     pluginsdk.TypeList,
+		Optional: true,
+		MaxItems: 1,
+		Elem: &pluginsdk.Resource{
+			Schema: map[string]*pluginsdk.Schema{
+				"affinity": {
+					Type: pluginsdk.TypeString,
+					ValidateFunc: validation.StringInSlice([]string{
+						string(containerapps.AffinityNone),
+						string(containerapps.AffinitySticky),
+					}, false),
+					Required:    true,
+					Description: "Sticky sessions affinity. Possible values are `none`, and `sticky`.",
+				},
+			},
+		},
+	}
+}
+
+func ContainerAppIngressStickySessionsComputed() *pluginsdk.Schema {
+	return &pluginsdk.Schema{
+		Type:     pluginsdk.TypeList,
+		Computed: true,
+		Elem: &pluginsdk.Resource{
+			Schema: map[string]*pluginsdk.Schema{
+				"affinity": {
+					Type:        pluginsdk.TypeString,
+					Computed:    true,
+					Description: "Sticky sessions affinity. Possible values are `none`, and `sticky`.",
+				},
+			},
+		},
+	}
+}
+
 func ContainerAppIngressTrafficWeight() *pluginsdk.Schema {
 	return &pluginsdk.Schema{
 		Type:     pluginsdk.TypeList,
@@ -598,6 +659,18 @@ func ContainerAppIngressTrafficWeightComputed() *pluginsdk.Schema {
 				},
 			},
 		},
+	}
+}
+
+func expandContainerAppIngressStickySessions(input []StickySessions) *containerapps.IngressStickySessions {
+	if len(input) == 0 {
+		return nil
+	}
+
+	stickySessions := input[0]
+
+	return &containerapps.IngressStickySessions{
+		Affinity: pointer.To(containerapps.Affinity(stickySessions.Affinity)),
 	}
 }
 
