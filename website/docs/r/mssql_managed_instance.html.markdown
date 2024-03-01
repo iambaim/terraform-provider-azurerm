@@ -263,6 +263,8 @@ In addition to the Arguments listed above - the following Attributes are exporte
 
 * `id` - The SQL Managed Instance ID.
 
+* `dns_zone` - The Dns Zone where the SQL Managed Instance is located.
+
 * `fqdn` - The fully qualified domain name of the Azure Managed SQL Instance
 
 ---
@@ -273,7 +275,7 @@ An `identity` block exports the following:
 
 * `tenant_id` - The Tenant ID for the Service Principal associated with the Identity of this SQL Managed Instance.
 
--> You can access the Principal ID via `azurerm_mssql_managed_instance.example.identity.0.principal_id` and the Tenant ID via `azurerm_mssql_managed_instance.example.identity.0.tenant_id`
+-> You can access the Principal ID via `azurerm_mssql_managed_instance.example.identity[0].principal_id` and the Tenant ID via `azurerm_mssql_managed_instance.example.identity[0].tenant_id`
 
 ## Timeouts
 
