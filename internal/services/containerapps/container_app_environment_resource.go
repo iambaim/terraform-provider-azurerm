@@ -437,6 +437,7 @@ func (r ContainerAppEnvironmentResource) Update() sdk.ResourceFunc {
 					CertificateValue:    pointer.To(state.CertificateValue),
 					CertificatePassword: pointer.To(state.CertificatePassword),
 				}
+			}
 
 			if metadata.ResourceData.HasChange("workload_profile") {
 				existing.Model.Properties.WorkloadProfiles = helpers.ExpandWorkloadProfiles(state.WorkloadProfiles)
