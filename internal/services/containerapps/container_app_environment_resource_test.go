@@ -422,10 +422,17 @@ resource "azurerm_container_app_environment" "test" {
   resource_group_name        = azurerm_resource_group.test.name
   location                   = azurerm_resource_group.test.location
   log_analytics_workspace_id = azurerm_log_analytics_workspace.test.id
-
-  infrastructure_subnet_id = azurerm_subnet.control.id
+  infrastructure_subnet_id   = azurerm_subnet.control.id
 
   internal_load_balancer_enabled = true
+  zone_redundancy_enabled        = true
+
+  workload_profile {
+    maximum_count         = 3
+    minimum_count         = 0
+    name                  = "D4-01"
+    workload_profile_type = "D4"
+  }
 
   custom_domain_certificate_blob_base64 = filebase64("testdata/testacc.pfx")
   custom_domain_certificate_password    = "TestAcc"
