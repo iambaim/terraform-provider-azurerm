@@ -8,10 +8,14 @@ jobs:
     name: Acceptance Tests
     runs-on: ubuntu-latest
     steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=$(basename ${GITHUB_REF_NAME})" >> $GITHUB_OUTPUT
+        id: extract_branch
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
-          ref: container_app_environment_custom_dns_suffix
+          ref: ${{ steps.extract_branch.outputs.branch }}
       - uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'
@@ -23,7 +27,7 @@ jobs:
       - run: make acctests
         env:
           TF_ACC: '1'
-          TESTARGS: '-parallel=1 -run=TestAccContainerAppEnvironment_completeWithCustomDnsSuffix'
+          TESTARGS: '-parallel=1 -run=TestAccContainerAppResource__'
           SERVICE: 'containerapps'
           TESTTIMEOUT: '60m'
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
@@ -33,14 +37,20 @@ jobs:
           ARM_TEST_LOCATION: ${{ secrets.ARM_TEST_LOCATION }}
           ARM_TEST_LOCATION_ALT: ${{ secrets.ARM_TEST_LOCATION_ALT }}
           ARM_TEST_LOCATION_ALT2: ${{ secrets.ARM_TEST_LOCATION_ALT2 }}
+          ARM_TEST_DNS_ZONE: azuredesk.top
+          ARM_TEST_DATA_RESOURCE_GROUP: test-rg
   pr-check:
     name: PR checks
     runs-on: ubuntu-latest
     steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=$(basename ${GITHUB_REF_NAME})" >> $GITHUB_OUTPUT
+        id: extract_branch
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
-          ref: container_app_environment_custom_dns_suffix
+          ref: ${{ steps.extract_branch.outputs.branch }}
       - uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'
