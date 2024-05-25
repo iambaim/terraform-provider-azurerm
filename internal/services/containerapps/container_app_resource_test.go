@@ -552,6 +552,14 @@ func TestAccContainerAppResource_ingressTrafficValidation(t *testing.T) {
 			Config:      r.ingressTrafficValidation(data, r.trafficBlockMoreThanOne()),
 			ExpectError: regexp.MustCompile(fmt.Sprintf(`at most one %s can be specified during creation`, "`ingress.0.traffic_weight`")),
 		},
+		{
+			Config:      r.ingressTrafficValidation(data, r.trafficBlockLatestRevisionNotSet()),
+			ExpectError: regexp.MustCompile(fmt.Sprintf(`%s must be set to true during creation`, "`ingress.0.traffic_weight.0.latest_revision`")),
+		},
+		{
+			Config:      r.ingressTrafficValidation(data, r.trafficBlockRevisionSuffixSet()),
+			ExpectError: regexp.MustCompile(fmt.Sprintf(`%s must not be set during creation`, "`ingress.0.traffic_weight.0.revision_suffix`")),
+		},
 	})
 }
 
@@ -1364,8 +1372,8 @@ resource "azurerm_container_app" "test" {
     sticky_sessions {
       affinity = "sticky"
     }
-    target_port                = 5000
-    transport                  = "http"
+    target_port = 5000
+    transport   = "http"
     traffic_weight {
       latest_revision = true
       percentage      = 100
@@ -2762,8 +2770,8 @@ resource "azurerm_container_app" "test" {
     sticky_sessions {
       affinity = "%s"
     }
-    target_port                = 5000
-    transport                  = "http"
+    target_port = 5000
+    transport   = "http"
     traffic_weight {
       latest_revision = true
       percentage      = 100
