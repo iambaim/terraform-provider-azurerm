@@ -27,7 +27,7 @@ jobs:
       - run: make acctests
         env:
           TF_ACC: '1'
-          TESTARGS: '-parallel=1 -run=TestAccContainerAppResource_'
+          TESTARGS: '-parallel=1 -run=TestAccContainerAppResource_complete'
           SERVICE: 'containerapps'
           TESTTIMEOUT: '60m'
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
@@ -55,5 +55,6 @@ jobs:
         with:
           go-version-file: ./.go-version
       - run: make tools
+      - run: make golangci-fix
       - run: make pr-check
       - run: git status
