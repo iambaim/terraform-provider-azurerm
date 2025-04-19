@@ -37,7 +37,7 @@ jobs:
           ARM_TEST_LOCATION: ${{ secrets.ARM_TEST_LOCATION }}
           ARM_TEST_LOCATION_ALT: ${{ secrets.ARM_TEST_LOCATION_ALT }}
           ARM_TEST_LOCATION_ALT2: ${{ secrets.ARM_TEST_LOCATION_ALT2 }}
-          ARM_TEST_DNS_ZONE: azuredesk.top
+          ARM_TEST_DNS_ZONE: gdesk.top
           ARM_TEST_DATA_RESOURCE_GROUP: test-rg
   pr-check:
     name: PR checks
@@ -54,9 +54,6 @@ jobs:
       - uses: actions/setup-go@0aaccfd150d50ccaeb58ebd88d36e91967a5f35b # v5.4.0
         with:
           go-version-file: ./.go-version
-      - uses: golangci/golangci-lint-action@4696ba8babb6127d732c3c6dde519db15edab9ea # v6.5.1
-        with:
-          version: 'v1.64.6'
       - run: make tools
       - run: make pr-check
       - run: git status
