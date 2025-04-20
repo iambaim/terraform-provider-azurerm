@@ -55,5 +55,5 @@ jobs:
         with:
           go-version-file: ./.go-version
       - run: make tools
-      - run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $$(go env GOPATH || $$GOPATH)/bin v1.64.6
+      - run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $$GOPATH)/bin v1.64.6
       - run: make pr-check
