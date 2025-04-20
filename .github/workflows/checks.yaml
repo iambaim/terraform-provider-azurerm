@@ -38,7 +38,7 @@ jobs:
           ARM_TEST_LOCATION_ALT: ${{ secrets.ARM_TEST_LOCATION_ALT }}
           ARM_TEST_LOCATION_ALT2: ${{ secrets.ARM_TEST_LOCATION_ALT2 }}
           ARM_TEST_DNS_ZONE: gdesk.top
-          ARM_TEST_DATA_RESOURCE_GROUP: test-rg
+          ARM_TEST_DATA_RESOURCE_GROUP: dns-rg
   pr-check:
     name: PR checks
     runs-on: ubuntu-latest
@@ -56,4 +56,5 @@ jobs:
           go-version-file: ./.go-version
       - run: make tools
       - run: make pr-check
+      - run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $$(go env GOPATH || $$GOPATH)/bin v1.64.6
       - run: git status
