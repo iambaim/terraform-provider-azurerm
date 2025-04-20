@@ -51,10 +51,9 @@ jobs:
         with:
           fetch-depth: 1
           ref: ${{ steps.extract_branch.outputs.branch }}
-      - uses: actions/setup-go@0aaccfd150d50ccaeb58ebd88d36e91967a5f35b # v5.4.0
+      - uses: actions/setup-go@v5
         with:
           go-version-file: ./.go-version
       - run: make tools
-      - run: make pr-check
       - run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $$(go env GOPATH || $$GOPATH)/bin v1.64.6
-      - run: git status
+      - run: make pr-check
