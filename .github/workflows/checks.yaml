@@ -27,7 +27,7 @@ jobs:
       - run: make acctests
         env:
           TF_ACC: '1'
-          TESTARGS: '-parallel=1 -run=TestAccContainerAppDataSource_complete'
+          TESTARGS: '-parallel=1 -run=TestAccContainerAppResource_ingressStickySessions'
           SERVICE: 'containerapps'
           TESTTIMEOUT: '60m'
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
