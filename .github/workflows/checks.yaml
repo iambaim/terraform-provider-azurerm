@@ -18,10 +18,10 @@ jobs:
           ref: ${{ steps.extract_branch.outputs.branch }}
       - uses: actions/setup-go@v5
         with:
-          go-version-file: 'go.mod'
+          go-version-file: ./.go-version
       - uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: '1.11.*'
+          terraform_version: '1.17.*'
           terraform_wrapper: false
       - run: make tools
       - run: make acctests
