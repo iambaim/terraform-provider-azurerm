@@ -57,3 +57,7 @@ jobs:
       - run: make tools
       - run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $$GOPATH)/bin v1.64.6
       - run: make pr-check
+        env:
+          ARM_TEST_LOCATION: ${{ secrets.ARM_TEST_LOCATION }}
+          ARM_TEST_LOCATION_ALT: ${{ secrets.ARM_TEST_LOCATION_ALT }}
+          ARM_TEST_LOCATION_ALT2: ${{ secrets.ARM_TEST_LOCATION_ALT2 }}
