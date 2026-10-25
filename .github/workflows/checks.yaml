@@ -35,6 +35,7 @@ jobs:
           TMPDIR: ${{ github.workspace }}/.tmp
       - run: make acctests
         env:
+          TMPDIR: ${{ github.workspace }}/.tmp
           TF_ACC: '1'
           TESTARGS: '-parallel=1 -run=TestAccContainerAppResource_regressionTest'
           SERVICE: 'containerapps'
