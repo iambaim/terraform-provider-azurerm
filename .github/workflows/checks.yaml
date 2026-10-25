@@ -8,7 +8,6 @@ jobs:
     name: Acceptance Tests
     runs-on: ubuntu-latest
     env:
-      TMPDIR: ${{ github.workspace }}/.tmp
       GOMODCACHE: ${{ github.workspace }}/.go-pkg-mod
       GOCACHE: ${{ github.workspace }}/.go-build-cache
     steps:
@@ -32,6 +31,8 @@ jobs:
           terraform_version: '1.17.*'
           terraform_wrapper: false
       - run: make tools
+        env:
+          TMPDIR: ${{ github.workspace }}/.tmp
       - run: make acctests
         env:
           TF_ACC: '1'
