@@ -1450,7 +1450,6 @@ resource "azurerm_container_app" "test" {
   ingress {
     allow_insecure_connections = true
     external_enabled           = true
-    session_affinity_enabled   = true
     target_port                = 5000
     transport                  = "http"
     client_certificate_mode    = "accept"
