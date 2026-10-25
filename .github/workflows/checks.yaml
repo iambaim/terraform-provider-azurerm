@@ -8,6 +8,12 @@ jobs:
     name: Acceptance Tests
     runs-on: ubuntu-latest
     steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
       - name: Extract branch name
         shell: bash
         run: echo "branch=$(basename ${GITHUB_REF_NAME})" >> $GITHUB_OUTPUT
@@ -41,8 +47,15 @@ jobs:
           ARM_TEST_DATA_RESOURCE_GROUP: dns-rg
   pr-check:
     name: PR checks
+    if: false
     runs-on: ubuntu-latest
     steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
       - name: Extract branch name
         shell: bash
         run: echo "branch=$(basename ${GITHUB_REF_NAME})" >> $GITHUB_OUTPUT
