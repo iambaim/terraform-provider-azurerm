@@ -30,7 +30,7 @@ jobs:
         with:
           terraform_version: '1.17.*'
           terraform_wrapper: false
-      - run: make tools
+      - run: mkdir ${{ github.workspace }}/.tmp && make tools
         env:
           TMPDIR: ${{ github.workspace }}/.tmp
       - run: make acctests
