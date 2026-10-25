@@ -46,8 +46,8 @@ jobs:
           ARM_TEST_DNS_ZONE: gdesk.top
           ARM_TEST_DATA_RESOURCE_GROUP: dns-rg
   pr-check:
-    name: PR checks
     if: false
+    name: PR checks
     runs-on: ubuntu-latest
     steps:
       - name: Maximize build space
