@@ -46,9 +46,9 @@ jobs:
           ARM_TEST_DNS_ZONE: gdesk.top
           ARM_TEST_DATA_RESOURCE_GROUP: dns-rg
   pr-check:
-    if: false
     name: PR checks
     runs-on: ubuntu-latest
+    if: false
     steps:
       - name: Maximize build space
         uses: easimon/maximize-build-space@master
