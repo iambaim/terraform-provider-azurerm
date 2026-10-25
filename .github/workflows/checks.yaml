@@ -18,14 +18,14 @@ jobs:
         shell: bash
         run: echo "branch=$(basename ${GITHUB_REF_NAME})" >> $GITHUB_OUTPUT
         id: extract_branch
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: ${{ steps.extract_branch.outputs.branch }}
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version-file: ./.go-version
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: '1.17.*'
           terraform_wrapper: false
@@ -60,11 +60,11 @@ jobs:
         shell: bash
         run: echo "branch=$(basename ${GITHUB_REF_NAME})" >> $GITHUB_OUTPUT
         id: extract_branch
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 1
           ref: ${{ steps.extract_branch.outputs.branch }}
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version-file: ./.go-version
       - run: make tools
