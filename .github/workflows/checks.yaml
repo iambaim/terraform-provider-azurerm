@@ -8,13 +8,13 @@ jobs:
     name: Acceptance Tests
     runs-on: ubuntu-latest
     env:
-      GOMODCACHE: ${{ github.workspace }}/../.go-pkg-mod
-      GOCACHE: ${{ github.workspace }}/../.go-build-cache
+      GOMODCACHE: ${{ github.workspace }}/.go-pkg-mod
+      GOCACHE: ${{ github.workspace }}/.go-build-cache
     steps:
       - name: Maximize build space
         uses: easimon/maximize-build-space@master
         with:
-          root-reserve-mb: 512
+          root-reserve-mb: 1024
           swap-size-mb: 1024
           remove-dotnet: 'true'
       - name: Extract branch name
