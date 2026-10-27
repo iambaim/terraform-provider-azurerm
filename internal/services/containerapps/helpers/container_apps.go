@@ -414,7 +414,7 @@ func ExpandContainerAppIngress(input []Ingress, appName string) *containerapps.I
 		CustomDomains:          ExpandContainerAppIngressCustomDomain(ingress.CustomDomains),
 		External:               pointer.To(ingress.IsExternal),
 		Fqdn:                   pointer.To(ingress.FQDN),
-		StickySessions:         expandContainerAppIngressStickySessions(ingress.IsSessionAffinity),
+		StickySessions:         ExpandContainerAppIngressStickySessions(ingress.IsSessionAffinity),
 		TargetPort:             pointer.To(ingress.TargetPort),
 		ExposedPort:            pointer.To(ingress.ExposedPort),
 		Traffic:                ExpandContainerAppIngressTraffic(ingress.TrafficWeights, appName),
@@ -483,7 +483,7 @@ func FlattenContainerAppIngress(input *containerapps.Ingress, appName string) []
 		CustomDomains:          FlattenContainerAppIngressCustomDomain(ingress.CustomDomains),
 		IsExternal:             pointer.From(ingress.External),
 		FQDN:                   pointer.From(ingress.Fqdn),
-		IsSessionAffinity:      flattenContainerAppIngressStickySessions(ingress.StickySessions),
+		IsSessionAffinity:      FlattenContainerAppIngressStickySessions(ingress.StickySessions),
 		TargetPort:             pointer.From(ingress.TargetPort),
 		ExposedPort:            pointer.From(ingress.ExposedPort),
 		TrafficWeights:         FlattenContainerAppIngressTraffic(ingress.Traffic, appName),
@@ -581,11 +581,11 @@ func FlattenContainerAppIngressCustomDomain(input *[]containerapps.CustomDomain)
 	return result
 }
 
-func flattenContainerAppIngressStickySessions(input *containerapps.IngressStickySessions) bool {
+func FlattenContainerAppIngressStickySessions(input *containerapps.IngressStickySessions) bool {
 	return input != nil && pointer.FromEnum(input.Affinity) == string(containerapps.AffinitySticky)
 }
 
-func flattenContainerAppIngressIpSecurityRestrictions(input *[]containerapps.IPSecurityRestrictionRule) []IpSecurityRestriction {
+func FlattenContainerAppIngressIpSecurityRestrictions(input *[]containerapps.IPSecurityRestrictionRule) []IpSecurityRestriction {
 	if input == nil {
 		return []IpSecurityRestriction{}
 	}
@@ -762,7 +762,7 @@ func ContainerAppIngressTrafficWeightComputed() *pluginsdk.Schema {
 	}
 }
 
-func expandContainerAppIngressStickySessions(input bool) *containerapps.IngressStickySessions {
+func ExpandContainerAppIngressStickySessions(input bool) *containerapps.IngressStickySessions {
 	result := containerapps.IngressStickySessions{}
 
 	if input {
@@ -774,7 +774,7 @@ func expandContainerAppIngressStickySessions(input bool) *containerapps.IngressS
 	return &result
 }
 
-func expandContainerAppIngressTraffic(input []TrafficWeight, appName string) *[]containerapps.TrafficWeight {
+func ExpandContainerAppIngressTraffic(input []TrafficWeight, appName string) *[]containerapps.TrafficWeight {
 	if len(input) == 0 {
 		return nil
 	}
